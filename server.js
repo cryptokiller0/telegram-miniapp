@@ -12,7 +12,6 @@ const PORT = process.env.PORT || 3000;
    SICUREZZA
 ========================= */
 
-// Helmet meno aggressivo (evita blocchi script interni)
 app.use(
   helmet({
     contentSecurityPolicy: false,
@@ -21,13 +20,13 @@ app.use(
 
 app.disable("x-powered-by");
 
-// Rate limit SOLO su endpoint sensibili
+app.use(express.json());
+
+// Rate limit solo su endpoint sensibili
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
 });
-
-app.use(express.json());
 
 /* =========================
    FILE STATICI
@@ -36,26 +35,23 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 /* =========================
-   BOT (NO AUTO WEBHOOK)
+   BOT CONFIG
 ========================= */
 
-if (!process.env.BOT_TOKEN) {
+const BOT_TOKEN = process.env.BOT_TOKEN;
+const BASE_URL = process.env.BASE_URL;
+
+if (!BOT_TOKEN) {
   console.error("BOT_TOKEN mancante");
-  process.exit(1);
 }
 
-if (!process.env.BASE_URL) {
-  console.error("BASE_URL mancante");
-  process.exit(1);
-}
+const bot = new TelegramBot(BOT_TOKEN);
 
-const bot = new TelegramBot(process.env.BOT_TOKEN);
+const WEBHOOK_PATH = `/bot${BOT_TOKEN}`;
 
 /* =========================
-   WEBHOOK ENDPOINT
+   WEBHOOK
 ========================= */
-
-const WEBHOOK_PATH = `/bot${process.env.BOT_TOKEN}`;
 
 app.post(WEBHOOK_PATH, (req, res) => {
   try {
@@ -67,7 +63,7 @@ app.post(WEBHOOK_PATH, (req, res) => {
 });
 
 /* =========================
-   COMANDO /start
+   /start
 ========================= */
 
 bot.onText(/\/start/, (msg) => {
@@ -97,7 +93,7 @@ Scelto il prodotto scrivici in pvt:
             {
               text: "🛒 Apri Mini-App",
               web_app: {
-                url: process.env.BASE_URL
+                url: BASE_URL
               }
             }
           ]
@@ -111,35 +107,39 @@ Scelto il prodotto scrivici in pvt:
    AUTH MINIAPP
 ========================= */
 
-// Applico rate limit SOLO qui
 app.post("/auth", limiter, (req, res) => {
   const { initData } = req.body;
   if (!initData) return res.status(400).send("No initData");
 
-  const secretKey = crypto
-    .createHmac("sha256", "WebAppData")
-    .update(process.env.BOT_TOKEN)
-    .digest();
+  try {
+    const secretKey = crypto
+      .createHmac("sha256", "WebAppData")
+      .update(BOT_TOKEN)
+      .digest();
 
-  const parsed = new URLSearchParams(initData);
-  const hash = parsed.get("hash");
-  parsed.delete("hash");
+    const parsed = new URLSearchParams(initData);
+    const hash = parsed.get("hash");
+    parsed.delete("hash");
 
-  const dataCheckString = [...parsed.entries()]
-    .sort()
-    .map(([key, value]) => `${key}=${value}`)
-    .join("\n");
+    const dataCheckString = [...parsed.entries()]
+      .sort()
+      .map(([key, value]) => `${key}=${value}`)
+      .join("\n");
 
-  const calculatedHash = crypto
-    .createHmac("sha256", secretKey)
-    .update(dataCheckString)
-    .digest("hex");
+    const calculatedHash = crypto
+      .createHmac("sha256", secretKey)
+      .update(dataCheckString)
+      .digest("hex");
 
-  if (calculatedHash !== hash) {
-    return res.status(403).send("Invalid signature");
+    if (calculatedHash !== hash) {
+      return res.status(403).send("Invalid signature");
+    }
+
+    res.sendStatus(200);
+  } catch (err) {
+    console.error("Errore auth:", err.message);
+    res.status(500).send("Auth error");
   }
-
-  res.sendStatus(200);
 });
 
 /* =========================
