@@ -3,219 +3,35 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Catalogo</title>
+<title>Ragazzi di Quartiere</title>
 
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0b0b0b;
-  color: white;
-}
-
-/* BANNER */
-.banner {
-  height: 250px;
-  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)),
-              url("https://picsum.photos/900/500?random=1");
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 25px;
-  font-size: 30px;
-  font-weight: bold;
-  letter-spacing: 3px;
-}
-
-/* GRID */
-.container {
-  padding: 20px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-  padding-bottom: 90px;
-}
-
-/* CARD */
-.card {
-  background: #141414;
-  border-radius: 18px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: 0.25s ease;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-}
-
-.card:hover {
-  transform: scale(1.04);
-}
-
-.card img {
-  width: 100%;
-  height: 140px;
-  object-fit: cover;
-}
-
-.card-title {
-  padding: 14px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 13px;
-  letter-spacing: 1px;
-}
-
-/* BACK BUTTON */
-.back {
-  margin: 20px;
-  padding: 12px;
-  background: #1c1c1c;
-  border-radius: 12px;
-  text-align: center;
-  cursor: pointer;
-}
-
-/* BOTTOM NAV */
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: #111;
-  display: flex;
-  justify-content: space-around;
-  padding: 15px 0;
-  border-top: 1px solid #222;
-}
-
-.bottom-nav div {
-  font-size: 12px;
-  text-align: center;
-  cursor: pointer;
-}
-</style>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<div class="banner">
-  THE CATALOG
+<div class="background-glow"></div>
+
+<div class="app">
+
+  <div class="hero">
+    <img src="assets/logo.jpg" class="logo">
+  </div>
+
+  <div class="screen active" id="homeScreen">
+    <div class="grid" id="categories"></div>
+  </div>
+
+  <div class="screen" id="productsScreen">
+    <div class="back-btn" onclick="goHome()">← Torna</div>
+    <div class="grid" id="products"></div>
+  </div>
+
 </div>
 
-<div id="backButton"></div>
-<div class="container" id="content"></div>
-
-<div class="bottom-nav">
-  <div onclick="showCategories()">HOME</div>
-  <div onclick="showCategories()">CATEGORIE</div>
-  <div>MENU</div>
-  <div>ORDINA</div>
-</div>
-
-<script>
-
-const categories = {
-  "American Dry & Static Sift": {
-    img: "https://picsum.photos/400/300?1",
-    sub: {
-      "Premium Line": {
-        img: "https://picsum.photos/400/300?2",
-        products: [
-          { name: "Product A1", img: "https://picsum.photos/400/300?3" },
-          { name: "Product A2", img: "https://picsum.photos/400/300?4" }
-        ]
-      }
-    }
-  },
-  "Moroccan Static Sift": {
-    img: "https://picsum.photos/400/300?5",
-    sub: {
-      "Classic": {
-        img: "https://picsum.photos/400/300?6",
-        products: [
-          { name: "Product M1", img: "https://picsum.photos/400/300?7" }
-        ]
-      }
-    }
-  },
-  "Fresh Frozen Sift": {
-    img: "https://picsum.photos/400/300?8",
-    sub: {
-      "Top Quality": {
-        img: "https://picsum.photos/400/300?9",
-        products: [
-          { name: "Product F1", img: "https://picsum.photos/400/300?10" }
-        ]
-      }
-    }
-  },
-  "Extraction": {
-    img: "https://picsum.photos/400/300?11",
-    sub: {
-      "Live": {
-        img: "https://picsum.photos/400/300?12",
-        products: [
-          { name: "Product E1", img: "https://picsum.photos/400/300?13" }
-        ]
-      }
-    }
-  }
-};
-
-const content = document.getElementById("content");
-const backButton = document.getElementById("backButton");
-
-function clear() {
-  content.innerHTML = "";
-  backButton.innerHTML = "";
-}
-
-function showBack(action) {
-  backButton.innerHTML = `<div class="back">← Indietro</div>`;
-  backButton.onclick = action;
-}
-
-function createCard(title, img, clickAction) {
-  const div = document.createElement("div");
-  div.className = "card";
-  div.innerHTML = `
-    <img src="${img}">
-    <div class="card-title">${title}</div>
-  `;
-  div.onclick = clickAction;
-  content.appendChild(div);
-}
-
-function showCategories() {
-  clear();
-  for (let cat in categories) {
-    createCard(cat, categories[cat].img, () => showSubcategories(cat));
-  }
-}
-
-function showSubcategories(category) {
-  clear();
-  showBack(showCategories);
-  for (let sub in categories[category].sub) {
-    createCard(
-      sub,
-      categories[category].sub[sub].img,
-      () => showProducts(category, sub)
-    );
-  }
-}
-
-function showProducts(category, sub) {
-  clear();
-  showBack(() => showSubcategories(category));
-  categories[category].sub[sub].products.forEach(prod => {
-    createCard(prod.name, prod.img, () => {});
-  });
-}
-
-showCategories();
-
-</script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="app.js"></script>
 
 </body>
 </html>
