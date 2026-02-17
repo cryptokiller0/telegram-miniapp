@@ -34,6 +34,46 @@ function openCity(city) {
   cityScreen.classList.add("active");
   window.scrollTo(0, 0);
 
+  if (city === "ROMA") {
+    renderRomaCategories();
+  } else {
+    renderProducts(city);
+  }
+}
+
+ function renderRomaCategories() {
+
+  productsGrid.innerHTML = "";
+
+  const categories = [
+    { name: "MAROCCAN HASH", img: "assets/roma/maroccanhash.jpg" },
+    { name: "WEED", img: "assets/roma/weed.jpg" },
+    { name: "HASH USA", img: "assets/roma/hashusa.jpg" },
+    { name: "ICE & EXTRACTION", img: "assets/roma/ice&extractionjpg" },
+    { name: "VAPE PEN", img: "assets/roma/vapepen.jpg" }
+  ];
+
+  categories.forEach((cat, index) => {
+
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.animationDelay = `${index * 0.15}s`;
+
+    card.innerHTML = `
+      <img src="${cat.img}">
+      <div class="card-overlay"></div>
+      <div class="card-title">${cat.name}</div>
+    `;
+
+    card.onclick = () => {
+      alert("Apriremo la categoria: " + cat.name);
+    };
+
+    productsGrid.appendChild(card);
+  });
+}
+
+
   if (tg) {
     tg.HapticFeedback.selectionChanged();
   }
