@@ -1,15 +1,18 @@
 const express = require("express");
 const TelegramBot = require("node-telegram-bot-api");
+const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Usa il token dalle variabili Railway
 const bot = new TelegramBot(process.env.BOT_TOKEN, { polling: true });
 
-// Route base per Railway
+// Serve file statici (mini-app)
+app.use(express.static(path.join(__dirname)));
+
+// Quando si apre il dominio principale
 app.get("/", (req, res) => {
-  res.send("Bot attivo 🚀");
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
 // Comando /start
@@ -24,11 +27,11 @@ bot.onText(/\/start/, (msg) => {
 
 All’interno della mini-app potrai trovare:
 
-• 🎥 Video dimostrativi dei prodotti, utili per vederli da vicino e capirne le caratteristiche.
-• 💰 Prezzi sempre aggiornati e facilmente consultabili.
-• 📄 Schede tecniche dettagliate per aiutarti a scegliere in modo informato.
+• 🎥 Video dimostrativi dei prodotti.
+• 💰 Prezzi sempre aggiornati.
+• 📄 Schede tecniche dettagliate.
 
-Per iniziare è sufficiente aprire la mini-app dal bottone qui sotto 👇
+Per iniziare apri la mini-app dal bottone qui sotto 👇
 
 Scelto il prodotto scrivici in pvt:
 @Nelquartiere
@@ -51,7 +54,6 @@ Scelto il prodotto scrivici in pvt:
   );
 });
 
-// Avvio server
 app.listen(PORT, () => {
-  console.log("Server avviato sulla porta " + PORT);
+  console.log("Server avviato");
 });
