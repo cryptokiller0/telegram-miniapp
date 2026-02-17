@@ -12,15 +12,21 @@ const PORT = process.env.PORT || 3000;
    SICUREZZA
 ========================= */
 
-app.use(helmet());
+// Helmet meno aggressivo (evita blocchi script interni)
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
+
 app.disable("x-powered-by");
 
+// Rate limit SOLO su endpoint sensibili
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
 });
 
-app.use(limiter);
 app.use(express.json());
 
 /* =========================
@@ -35,6 +41,11 @@ app.use(express.static(path.join(__dirname, "public")));
 
 if (!process.env.BOT_TOKEN) {
   console.error("BOT_TOKEN mancante");
+  process.exit(1);
+}
+
+if (!process.env.BASE_URL) {
+  console.error("BASE_URL mancante");
   process.exit(1);
 }
 
@@ -68,11 +79,17 @@ bot.onText(/\/start/, (msg) => {
 
 📱 Come usare la nostra mini-app
 
-• 🎥 Video dimostrativi
-• 💰 Prezzi aggiornati
-• 📄 Schede tecniche dettagliate
+All’interno della mini-app potrai trovare:
 
-Premi il bottone qui sotto 👇`,
+• 🎥 Video dimostrativi dei prodotti, utili per vederli da vicino e capirne le caratteristiche.
+• 💰 Prezzi sempre aggiornati e facilmente consultabili.
+• 📄 Schede tecniche dettagliate per aiutarti a scegliere in modo informato.
+
+Per iniziare è sufficiente aprire la mini-app dal menu del bot.
+
+Scelto il prodotto scrivici in pvt:
+@Nelquartiere
+@fromthestreetstothestars`,
     {
       reply_markup: {
         inline_keyboard: [
@@ -94,7 +111,8 @@ Premi il bottone qui sotto 👇`,
    AUTH MINIAPP
 ========================= */
 
-app.post("/auth", (req, res) => {
+// Applico rate limit SOLO qui
+app.post("/auth", limiter, (req, res) => {
   const { initData } = req.body;
   if (!initData) return res.status(400).send("No initData");
 
