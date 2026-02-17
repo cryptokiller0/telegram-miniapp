@@ -25,7 +25,7 @@ window.addEventListener("load", () => {
       mainApp.classList.remove("hidden");
     }, 1000);
 
-  }, 3200);
+  }, 3800);
 });
 
 function openCity(city) {
