@@ -5,15 +5,11 @@ const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Bot con token dalle variabili Railway
 const bot = new TelegramBot(process.env.BOT_TOKEN, { polling: true });
 
-// Serve file statici (mini-app)
-app.use(express.static(path.join(__dirname)));
-
-// Quando si apre il dominio principale
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
-});
+// Serve la mini-app dalla cartella "public"
+app.use(express.static(path.join(__dirname, "public")));
 
 // Comando /start
 bot.onText(/\/start/, (msg) => {
@@ -21,23 +17,22 @@ bot.onText(/\/start/, (msg) => {
 
   bot.sendMessage(
     chatId,
-    `Benvenuto dai Ragazzi Di Quartiere In Montagna 🏔️
+`Benvenuto dai Ragazzi Di Quartiere In Montagna 🏔️
 
-📱 *Come usare la nostra mini-app*
+📱 Come usare la nostra mini-app
 
 All’interno della mini-app potrai trovare:
 
-• 🎥 Video dimostrativi dei prodotti.
-• 💰 Prezzi sempre aggiornati.
-• 📄 Schede tecniche dettagliate.
+• 🎥 Video dimostrativi dei prodotti, utili per vederli da vicino e capirne le caratteristiche.
+• 💰 Prezzi sempre aggiornati e facilmente consultabili.
+• 📄 Schede tecniche dettagliate per aiutarti a scegliere in modo informato.
 
-Per iniziare apri la mini-app dal bottone qui sotto 👇
+Per iniziare è sufficiente aprire la mini-app dal bottone qui sotto 👇
 
 Scelto il prodotto scrivici in pvt:
 @Nelquartiere
 @fromthestreetstothestars`,
     {
-      parse_mode: "Markdown",
       reply_markup: {
         inline_keyboard: [
           [
@@ -55,5 +50,5 @@ Scelto il prodotto scrivici in pvt:
 });
 
 app.listen(PORT, () => {
-  console.log("Server avviato");
+  console.log("Server avviato sulla porta " + PORT);
 });
