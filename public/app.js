@@ -44,8 +44,10 @@ function animateFlames() {
 animateFlames();
 
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelector(".loader").style.display = "none";
-  document.querySelector(".app").classList.remove("hidden");
+  const app = document.querySelector(".app");
+  if (app) {
+    app.classList.remove("hidden");
+  }
 });
 
 const tg = window.Telegram.WebApp;
