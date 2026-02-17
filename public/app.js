@@ -9,6 +9,7 @@ const mainApp = document.getElementById("mainApp");
 const homeScreen = document.getElementById("homeScreen");
 const cityScreen = document.getElementById("cityScreen");
 const cityTitle = document.getElementById("cityTitle");
+const productsGrid = document.getElementById("productsGrid");
 
 window.addEventListener("load", () => {
 
@@ -41,7 +42,7 @@ function openCity(city) {
   }
 }
 
- function renderRomaCategories() {
+function renderRomaCategories() {
 
   productsGrid.innerHTML = "";
 
@@ -49,7 +50,7 @@ function openCity(city) {
     { name: "MAROCCAN HASH", img: "assets/roma/maroccanhash.jpg" },
     { name: "WEED", img: "assets/roma/weed.jpg" },
     { name: "HASH USA", img: "assets/roma/hashusa.jpg" },
-    { name: "ICE & EXTRACTION", img: "assets/roma/ice&extractionjpg" },
+    { name: "ICE & EXTRACTION", img: "assets/roma/iceextraction.jpg" }, 
     { name: "VAPE PEN", img: "assets/roma/vapepen.jpg" }
   ];
 
@@ -71,8 +72,6 @@ function openCity(city) {
 
     productsGrid.appendChild(card);
   });
-}
-
 
   if (tg) {
     tg.HapticFeedback.selectionChanged();
