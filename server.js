@@ -1,20 +1,35 @@
 const express = require("express");
 const TelegramBot = require("node-telegram-bot-api");
-const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const token = process.env.BOT_TOKEN;
-const bot = new TelegramBot(token, { polling: true });
-
-app.use(express.static(path.join(__dirname, "public")));
+const bot = new TelegramBot(process.env.BOT_TOKEN, { polling: true });
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.send("Server attivo");
+});
+
+// Quando l'utente scrive /start
+bot.onText(/\/start/, (msg) => {
+  const chatId = msg.chat.id;
+
+  bot.sendMessage(chatId, "Benvenuto nel Catalogo 🔥", {
+    reply_markup: {
+      inline_keyboard: [
+        [
+          {
+            text: "Apri Catalogo",
+            web_app: {
+              url: "https://telegram-miniapp-production-4431.up.railway.app"
+            }
+          }
+        ]
+      ]
+    }
+  });
 });
 
 app.listen(PORT, () => {
-  console.log("Server running on port " + PORT);
+  console.log("Server avviato");
 });
-
