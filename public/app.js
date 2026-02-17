@@ -23,10 +23,11 @@ window.addEventListener("load", () => {
 
     setTimeout(() => {
       intro.remove();
-      mainApp.classList.remove("hidden");
+      mainApp.style.display = "block";
+
     }, 1000);
 
-  }, 3800);
+  }, 3700);
 });
 
 function openCity(city) {
