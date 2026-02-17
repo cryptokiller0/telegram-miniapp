@@ -1,4 +1,20 @@
 const tg = window.Telegram?.WebApp;
+if (tg) {
+  fetch("/auth", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      initData: tg.initData
+    })
+  }).then(res => {
+    if (!res.ok) {
+      document.body.innerHTML = "<h1>Accesso negato</h1>";
+    }
+  });
+}
+
 
 if (tg) {
   tg.expand();
