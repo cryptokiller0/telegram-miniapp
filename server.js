@@ -1,16 +1,12 @@
-const helmet = require("helmet");
-const rateLimit = require("express-rate-limit");
-const crypto = require("crypto");
 const express = require("express");
 const TelegramBot = require("node-telegram-bot-api");
 const path = require("path");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+const crypto = require("crypto");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-/* =========================
-   SICUREZZA BASE
-========================= */
 
 app.use(helmet());
 app.disable("x-powered-by");
@@ -18,8 +14,6 @@ app.disable("x-powered-by");
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
 });
 
 app.use(limiter);
@@ -32,7 +26,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 /* =========================
-   BOT TELEGRAM
+   BOT TELEGRAM (WEBHOOK MODE)
 ========================= */
 
 if (!process.env.BOT_TOKEN) {
@@ -42,8 +36,17 @@ if (!process.env.BOT_TOKEN) {
 
 const bot = new TelegramBot(process.env.BOT_TOKEN);
 
+const WEBHOOK_URL = "https://telegram-miniapp-production-4431.up.railway.app";
+
+bot.setWebHook(`${WEBHOOK_URL}/bot${process.env.BOT_TOKEN}`);
+
+app.post(`/bot${process.env.BOT_TOKEN}`, (req, res) => {
+  bot.processUpdate(req.body);
+  res.sendStatus(200);
+});
+
 /* =========================
-   COMANDO /start (UGUALE A PRIMA)
+   COMANDO /start
 ========================= */
 
 bot.onText(/\/start/, (msg) => {
@@ -73,7 +76,7 @@ Scelto il prodotto scrivici in pvt:
             {
               text: "🛒 Apri Mini-App",
               web_app: {
-                url: "https://telegram-miniapp-production-4431.up.railway.app"
+                url: WEBHOOK_URL
               }
             }
           ]
@@ -90,15 +93,11 @@ Scelto il prodotto scrivici in pvt:
 app.post("/auth", (req, res) => {
   const { initData } = req.body;
 
-  if (!initData) {
-    return res.status(400).send("No initData");
-  }
-
-  const botToken = process.env.BOT_TOKEN;
+  if (!initData) return res.status(400).send("No initData");
 
   const secretKey = crypto
     .createHmac("sha256", "WebAppData")
-    .update(botToken)
+    .update(process.env.BOT_TOKEN)
     .digest();
 
   const parsed = new URLSearchParams(initData);
@@ -116,18 +115,16 @@ app.post("/auth", (req, res) => {
     .digest("hex");
 
   if (calculatedHash !== hash) {
-    console.log("Firma Telegram non valida:", req.ip);
     return res.status(403).send("Invalid signature");
   }
 
-  res.status(200).send("Authorized");
+  res.sendStatus(200);
 });
 
 /* =========================
-   AVVIO SERVER
+   START SERVER
 ========================= */
 
 app.listen(PORT, () => {
   console.log("Server avviato sulla porta " + PORT);
 });
-
