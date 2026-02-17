@@ -6,6 +6,12 @@ const TelegramBot = require("node-telegram-bot-api");
 const path = require("path");
 
 const app = express();
+const PORT = process.env.PORT || 3000;
+
+/* =========================
+   SICUREZZA BASE
+========================= */
+
 app.use(helmet());
 app.disable("x-powered-by");
 
@@ -19,26 +25,27 @@ const limiter = rateLimit({
 app.use(limiter);
 app.use(express.json());
 
-const PORT = process.env.PORT || 3000;
-
-// Bot con token dalle variabili Railway
-const bot = new TelegramBot(process.env.BOT_TOKEN, { polling: true });
-
-// Serve la mini-app dalla cartella "public"
-app.use((req, res, next) => {
-  const ua = req.headers["user-agent"] || "";
-
-  if (!ua.includes("Telegram")) {
-    console.log("Accesso bloccato:", req.ip);
-    return res.status(403).send("Accesso negato");
-  }
-
-  next();
-});
+/* =========================
+   FILE STATICI
+========================= */
 
 app.use(express.static(path.join(__dirname, "public")));
 
-// Comando /start
+/* =========================
+   BOT TELEGRAM
+========================= */
+
+if (!process.env.BOT_TOKEN) {
+  console.error("BOT_TOKEN non definito!");
+  process.exit(1);
+}
+
+const bot = new TelegramBot(process.env.BOT_TOKEN);
+
+/* =========================
+   COMANDO /start (UGUALE A PRIMA)
+========================= */
+
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
 
@@ -76,6 +83,10 @@ Scelto il prodotto scrivici in pvt:
   );
 });
 
+/* =========================
+   VERIFICA FIRMA TELEGRAM
+========================= */
+
 app.post("/auth", (req, res) => {
   const { initData } = req.body;
 
@@ -112,6 +123,11 @@ app.post("/auth", (req, res) => {
   res.status(200).send("Authorized");
 });
 
+/* =========================
+   AVVIO SERVER
+========================= */
+
 app.listen(PORT, () => {
   console.log("Server avviato sulla porta " + PORT);
 });
+
