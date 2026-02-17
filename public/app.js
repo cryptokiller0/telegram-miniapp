@@ -1,3 +1,48 @@
+/* FLAME INTRO */
+const flameCanvas = document.getElementById("flameCanvas");
+const flameCtx = flameCanvas.getContext("2d");
+
+flameCanvas.width = window.innerWidth;
+flameCanvas.height = window.innerHeight;
+
+let flames = [];
+
+for (let i = 0; i < 120; i++) {
+  flames.push({
+    x: Math.random() * flameCanvas.width,
+    y: flameCanvas.height,
+    size: Math.random() * 3 + 2,
+    speed: Math.random() * 3 + 2
+  });
+}
+
+function animateFlames() {
+  flameCtx.clearRect(0, 0, flameCanvas.width, flameCanvas.height);
+
+  flames.forEach(f => {
+    flameCtx.beginPath();
+    let gradient = flameCtx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.size * 5);
+    gradient.addColorStop(0, "rgba(255,180,0,0.9)");
+    gradient.addColorStop(0.4, "rgba(255,80,0,0.6)");
+    gradient.addColorStop(1, "rgba(0,0,0,0)");
+
+    flameCtx.fillStyle = gradient;
+    flameCtx.arc(f.x, f.y, f.size * 5, 0, Math.PI * 2);
+    flameCtx.fill();
+
+    f.y -= f.speed;
+
+    if (f.y < 0) {
+      f.y = flameCanvas.height;
+      f.x = Math.random() * flameCanvas.width;
+    }
+  });
+
+  requestAnimationFrame(animateFlames);
+}
+
+animateFlames();
+
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelector(".loader").style.display = "none";
   document.querySelector(".app").classList.remove("hidden");
@@ -19,8 +64,19 @@ function haptic() {
 function openCity(city) {
   haptic();
   cityTitle.innerText = city;
-  homeScreen.classList.remove("active");
-  cityScreen.classList.add("active");
+
+  const overlay = document.createElement("div");
+  overlay.className = "transition-flame";
+  document.body.appendChild(overlay);
+
+  setTimeout(() => {
+    homeScreen.classList.remove("active");
+    cityScreen.classList.add("active");
+  }, 300);
+
+  setTimeout(() => {
+    overlay.remove();
+  }, 900);
 }
 
 function goHome() {
