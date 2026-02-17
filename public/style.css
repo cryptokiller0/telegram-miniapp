@@ -89,12 +89,30 @@ body {
 /* CARD */
 .card {
   position: relative;
-  background: rgba(20,20,20,0.9);
   border-radius: 20px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.4s cubic-bezier(.2,.8,.2,1),
-              box-shadow 0.4s;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.card img {
+  .card img {
+  width: 100%;
+  height: 260px; /* aumentiamo altezza */
+  object-fit: cover;
+  display: block;
+}
+
+/* sfumatura scura sotto il testo */
+.card::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+
 }
 
 .card img {
@@ -279,3 +297,41 @@ html {
 body {
   -webkit-overflow-scrolling: touch;
 }
+.card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.card img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  display: block;
+}
+
+/* sfumatura scura sotto il testo */
+.card::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+}
+
+.card-title {
+  position: absolute;
+  bottom: 25px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: white;
+  z-index: 2;
+  text-shadow: 0 0 20px rgba(255,140,0,0.9);
+}
+
