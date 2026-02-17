@@ -11,21 +11,45 @@
 
 <body>
 
-<div class="background-glow"></div>
+<div class="loader">
+  <img src="assets/logo.jpg" class="loader-logo">
+</div>
 
-<div class="app">
+<canvas id="smoke"></canvas>
+
+<div class="app hidden">
 
   <div class="hero">
     <img src="assets/logo.jpg" class="logo">
   </div>
 
-  <div class="screen active" id="homeScreen">
-    <div class="grid" id="categories"></div>
+  <div id="homeScreen" class="screen active">
+    <div class="grid">
+      <div class="card" onclick="openCity('MILANO')">
+        <img src="assets/milano.jpg">
+        <div class="card-title">MILANO</div>
+      </div>
+
+      <div class="card" onclick="openCity('ROMA')">
+        <img src="assets/roma.jpg">
+        <div class="card-title">ROMA</div>
+      </div>
+
+      <div class="card" onclick="openCity('CALABRIA')">
+        <img src="assets/calabria.jpg">
+        <div class="card-title">CALABRIA</div>
+      </div>
+    </div>
   </div>
 
-  <div class="screen" id="productsScreen">
-    <div class="back-btn" onclick="goHome()">← Torna</div>
-    <div class="grid" id="products"></div>
+  <div id="cityScreen" class="screen">
+    <h2 id="cityTitle"></h2>
+
+    <div class="options">
+      <div class="btn" onclick="goHome()">← Torna alla Home</div>
+      <div class="btn" onclick="viewAll()">👁 Vedi tutti i prodotti</div>
+      <div class="btn order" onclick="orderNow()">🛒 Ordina</div>
+    </div>
   </div>
 
 </div>

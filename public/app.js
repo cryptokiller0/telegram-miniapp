@@ -1,26 +1,9 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-const categories = {
-  "American Dry": {
-    img: "https://picsum.photos/400/300?1",
-    products: [
-      { name: "Premium A1", img: "https://picsum.photos/400/300?2" },
-      { name: "Premium A2", img: "https://picsum.photos/400/300?3" }
-    ]
-  },
-  "Moroccan Static": {
-    img: "https://picsum.photos/400/300?4",
-    products: [
-      { name: "Classic M1", img: "https://picsum.photos/400/300?5" }
-    ]
-  }
-};
-
-const categoriesDiv = document.getElementById("categories");
-const productsDiv = document.getElementById("products");
 const homeScreen = document.getElementById("homeScreen");
-const productsScreen = document.getElementById("productsScreen");
+const cityScreen = document.getElementById("cityScreen");
+const cityTitle = document.getElementById("cityTitle");
 
 function haptic() {
   if (tg.HapticFeedback) {
@@ -28,45 +11,62 @@ function haptic() {
   }
 }
 
-function createCard(title, img, clickAction) {
-  const div = document.createElement("div");
-  div.className = "card";
-  div.innerHTML = `
-    <img src="${img}">
-    <div class="card-title">${title}</div>
-  `;
-  div.onclick = () => {
-    haptic();
-    clickAction();
-  };
-  return div;
-}
-
-function showCategories() {
-  categoriesDiv.innerHTML = "";
-  for (let cat in categories) {
-    categoriesDiv.appendChild(
-      createCard(cat, categories[cat].img, () => showProducts(cat))
-    );
-  }
-}
-
-function showProducts(category) {
-  productsDiv.innerHTML = "";
-  categories[category].products.forEach(prod => {
-    productsDiv.appendChild(
-      createCard(prod.name, prod.img, () => {})
-    );
-  });
-
+function openCity(city) {
+  haptic();
+  cityTitle.innerText = city;
   homeScreen.classList.remove("active");
-  productsScreen.classList.add("active");
+  cityScreen.classList.add("active");
 }
 
 function goHome() {
   haptic();
-  productsScreen.classList.remove("active");
+  cityScreen.classList.remove("active");
   homeScreen.classList.add("active");
 }
 
-showCategories();
+function viewAll() {
+  haptic();
+  alert("Qui mostreremo tutti i prodotti.");
+}
+
+function orderNow() {
+  haptic();
+  window.open("https://t.me/Nelquartiere", "_blank");
+}
+
+/* SMOKE EFFECT */
+const canvas = document.getElementById("smoke");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+for (let i = 0; i < 40; i++) {
+  particles.push({
+    x: Math.random() * canvas.width,
+    y: canvas.height + Math.random() * 200,
+    radius: Math.random() * 3 + 2,
+    speed: Math.random() * 0.5 + 0.2
+  });
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "rgba(255,120,0,0.05)";
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+    ctx.fill();
+    p.y -= p.speed;
+    if (p.y < 0) {
+      p.y = canvas.height;
+    }
+  });
+
+  requestAnimationFrame(animate);
+}
+
+animate();
