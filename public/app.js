@@ -48,11 +48,11 @@ function renderRomaCategories() {
   productsGrid.innerHTML = "";
 
   const categories = [
-    { name: "MAROCCAN HASH", img: "assets/roma/maroccanhash.jpg" },
-    { name: "WEED", img: "assets/roma/weed.jpg" },
-    { name: "HASH USA", img: "assets/roma/hashusa.jpg" },
-    { name: "ICE & EXTRACTION", img: "assets/roma/iceextraction.jpg" }, 
-    { name: "VAPE PEN", img: "assets/roma/vapepen.jpg" }
+    { name: "MAROCCAN HASH", img: "assets/ROMA/maroccanhash.jpg" },
+    { name: "WEED", img: "assets/ROMA/weed.jpg" },
+    { name: "HASH USA", img: "assets/ROMA/hashusa.jpg" },
+    { name: "ICE & EXTRACTION", img: "assets/ROMA/iceextraction.jpg" }, 
+    { name: "VAPE PEN", img: "assets/ROMA/vapepen.jpg" }
   ];
 
   categories.forEach((cat, index) => {
