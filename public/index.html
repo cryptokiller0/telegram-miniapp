@@ -30,17 +30,18 @@
   <div id="homeScreen" class="screen active">
 
     <div class="grid">
-      <div class="card" onclick="openCity('MILANO')">
+      <div class="card" onclick="openCity('MILANO', event)">
+
         <img src="assets/milano.jpg">
         <div class="card-title">MILANO</div>
       </div>
 
-      <div class="card" onclick="openCity('ROMA')">
+      <div class="card" onclick="openCity('ROMA', event)">
         <img src="assets/roma.jpg">
         <div class="card-title">ROMA</div>
       </div>
 
-      <div class="card" onclick="openCity('CALABRIA')">
+      <div class="card" onclick="openCity('CALABRIA', event)">
         <img src="assets/calabria.jpg">
         <div class="card-title">CALABRIA</div>
       </div>
@@ -49,7 +50,7 @@
   </div>
 
   <div id="cityScreen" class="screen">
-    <h2 id="cityTitle" class="city-title"></h2>
+    <h2 id="cityTitle" class="city-title gold-text"></h2>
 
     <div class="city-content">
       <p>Qui inseriremo le sottocategorie.</p>

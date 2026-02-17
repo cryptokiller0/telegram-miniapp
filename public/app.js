@@ -20,19 +20,26 @@ function animateFlames() {
   flameCtx.clearRect(0, 0, flameCanvas.width, flameCanvas.height);
 
   flames.forEach(f => {
-    flameCtx.beginPath();
-    let gradient = flameCtx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.size * 5);
-    gradient.addColorStop(0, "rgba(255,180,0,0.9)");
-    gradient.addColorStop(0.4, "rgba(255,80,0,0.6)");
+
+    let gradient = flameCtx.createRadialGradient(
+      f.x, f.y, 0,
+      f.x, f.y, f.size * 8
+    );
+
+    gradient.addColorStop(0, "rgba(255,220,100,0.9)");
+    gradient.addColorStop(0.2, "rgba(255,140,0,0.8)");
+    gradient.addColorStop(0.5, "rgba(255,50,0,0.5)");
     gradient.addColorStop(1, "rgba(0,0,0,0)");
 
     flameCtx.fillStyle = gradient;
-    flameCtx.arc(f.x, f.y, f.size * 5, 0, Math.PI * 2);
+    flameCtx.beginPath();
+    flameCtx.arc(f.x, f.y, f.size * 8, 0, Math.PI * 2);
     flameCtx.fill();
 
     f.y -= f.speed;
+    f.x += Math.sin(f.y * 0.05) * 1.2;
 
-    if (f.y < 0) {
+    if (f.y < -50) {
       f.y = flameCanvas.height;
       f.x = Math.random() * flameCanvas.width;
     }
@@ -67,18 +74,16 @@ function openCity(city) {
   haptic();
   cityTitle.innerText = city;
 
-  const overlay = document.createElement("div");
-  overlay.className = "transition-flame";
-  document.body.appendChild(overlay);
+  const clickedCard = event.currentTarget;
+  clickedCard.style.transform = "scale(1.15)";
+  clickedCard.style.zIndex = "10";
 
   setTimeout(() => {
     homeScreen.classList.remove("active");
     cityScreen.classList.add("active");
-  }, 300);
-
-  setTimeout(() => {
-    overlay.remove();
-  }, 900);
+    clickedCard.style.transform = "";
+    clickedCard.style.zIndex = "";
+  }, 400);
 }
 
 function goHome() {
@@ -141,3 +146,9 @@ function animateParticles() {
 
 animateParticles();
 
+document.addEventListener("wheel", function(e) {
+  window.scrollBy({
+    top: e.deltaY * 0.6,
+    behavior: "smooth"
+  });
+});
