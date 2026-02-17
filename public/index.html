@@ -6,22 +6,21 @@
 <title>Ragazzi di Quartiere</title>
 
 <link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<div class="intro">
-  <canvas id="flameCanvas"></canvas>
-  <div class="intro-logo">
-    <img src="assets/logo.jpg">
-  </div>
+<!-- INTRO CINEMATOGRAFICA -->
+<div class="intro" id="intro">
+  <div class="fire-bg"></div>
+  <div class="sparks"></div>
+  <h1 class="intro-title">RAGAZZI DI QUARTIERE</h1>
 </div>
 
+<div class="background-glow"></div>
 
-<canvas id="smoke"></canvas>
-
-<div class="app hidden">
+<div class="app hidden" id="mainApp">
 
   <div class="hero">
     <img src="assets/logo.jpg" class="logo">
@@ -30,74 +29,40 @@
   <div id="homeScreen" class="screen active">
 
     <div class="grid">
-      <div class="card" onclick="openCity('MILANO', event)">
 
+      <div class="card delay0" onclick="openCity('MILANO')">
         <img src="assets/milano.jpg">
+        <div class="card-overlay"></div>
         <div class="card-title">MILANO</div>
       </div>
 
-      <div class="card" onclick="openCity('ROMA', event)">
+      <div class="card delay1" onclick="openCity('ROMA')">
         <img src="assets/roma.jpg">
+        <div class="card-overlay"></div>
         <div class="card-title">ROMA</div>
       </div>
 
-      <div class="card" onclick="openCity('CALABRIA', event)">
+      <div class="card delay2" onclick="openCity('CALABRIA')">
         <img src="assets/calabria.jpg">
+        <div class="card-overlay"></div>
         <div class="card-title">CALABRIA</div>
       </div>
+
     </div>
 
   </div>
 
   <div id="cityScreen" class="screen">
-    <h2 id="cityTitle" class="city-title gold-text"></h2>
-
+    <h2 id="cityTitle" class="city-title"></h2>
     <div class="city-content">
-      <p>Qui inseriremo le sottocategorie.</p>
+      <p>Qui inseriremo categorie e prodotti con animazioni premium.</p>
     </div>
   </div>
 
-  <!-- MENU FISSO BASSO -->
   <div class="bottom-menu">
     <div class="menu-btn" onclick="goHome()">Home</div>
     <div class="menu-btn" onclick="viewAll()">Tutti</div>
     <div class="menu-btn order" onclick="orderNow()">Ordina</div>
-  </div>
-
-</div>
-
-
-  <div class="hero">
-    <img src="assets/logo.jpg" class="logo">
-  </div>
-
-  <div id="homeScreen" class="screen active">
-    <div class="grid">
-      <div class="card" onclick="openCity('MILANO')">
-        <img src="assets/milano.jpg">
-        <div class="card-title">MILANO</div>
-      </div>
-
-      <div class="card" onclick="openCity('ROMA')">
-        <img src="assets/roma.jpg">
-        <div class="card-title">ROMA</div>
-      </div>
-
-      <div class="card" onclick="openCity('CALABRIA')">
-        <img src="assets/calabria.jpg">
-        <div class="card-title">CALABRIA</div>
-      </div>
-    </div>
-  </div>
-
-  <div id="cityScreen" class="screen">
-    <h2 id="cityTitle"></h2>
-
-    <div class="options">
-      <div class="btn" onclick="goHome()">← Torna alla Home</div>
-      <div class="btn" onclick="viewAll()">👁 Vedi tutti i prodotti</div>
-      <div class="btn order" onclick="orderNow()">🛒 Ordina</div>
-    </div>
   </div>
 
 </div>
