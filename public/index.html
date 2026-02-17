@@ -24,6 +24,49 @@
   </div>
 
   <div id="homeScreen" class="screen active">
+
+    <div class="grid">
+      <div class="card" onclick="openCity('MILANO')">
+        <img src="assets/milano.jpg">
+        <div class="card-title">MILANO</div>
+      </div>
+
+      <div class="card" onclick="openCity('ROMA')">
+        <img src="assets/roma.jpg">
+        <div class="card-title">ROMA</div>
+      </div>
+
+      <div class="card" onclick="openCity('CALABRIA')">
+        <img src="assets/calabria.jpg">
+        <div class="card-title">CALABRIA</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="cityScreen" class="screen">
+    <h2 id="cityTitle" class="city-title"></h2>
+
+    <div class="city-content">
+      <p>Qui inseriremo le sottocategorie.</p>
+    </div>
+  </div>
+
+  <!-- MENU FISSO BASSO -->
+  <div class="bottom-menu">
+    <div class="menu-btn" onclick="goHome()">Home</div>
+    <div class="menu-btn" onclick="viewAll()">Tutti</div>
+    <div class="menu-btn order" onclick="orderNow()">Ordina</div>
+  </div>
+
+</div>
+
+
+  <div class="hero">
+    <img src="assets/logo.jpg" class="logo">
+  </div>
+
+  <div id="homeScreen" class="screen active">
     <div class="grid">
       <div class="card" onclick="openCity('MILANO')">
         <img src="assets/milano.jpg">
