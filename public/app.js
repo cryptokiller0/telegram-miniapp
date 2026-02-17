@@ -51,7 +51,7 @@ function renderRomaCategories() {
     { name: "MAROCCAN HASH", img: "assets/ROMA/maroccanhash.jpg" },
     { name: "WEED", img: "assets/ROMA/weed.jpg" },
     { name: "HASH USA", img: "assets/ROMA/hashusa.jpg" },
-    { name: "ICE & EXTRACTION", img: "assets/ROMA/iceextraction.jpg" }, 
+    { name: "ICE & EXTRACTION", img: "assets/ROMA/Iceextraction.jpg" }, 
     { name: "VAPE PEN", img: "assets/ROMA/vapepen.jpg" }
   ];
 
