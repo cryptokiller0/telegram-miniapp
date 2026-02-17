@@ -215,3 +215,46 @@ body {
 .menu-btn.order {
   color: #ffae00;
 }
+
+/* INTRO LOGO DALLE FIAMME */
+.fire-realistic {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 400px;
+  background:
+    radial-gradient(circle at 30% 100%, rgba(255,180,0,0.9) 0%, rgba(255,80,0,0.8) 30%, transparent 70%),
+    radial-gradient(circle at 70% 100%, rgba(255,120,0,0.9) 0%, rgba(255,0,0,0.8) 35%, transparent 75%);
+  filter: blur(40px);
+  animation: realisticFire 1.5s infinite alternate ease-in-out;
+}
+
+@keyframes realisticFire {
+  from { transform: scaleY(1) scaleX(1); }
+  to { transform: scaleY(1.3) scaleX(1.05); }
+}
+
+.intro-logo {
+  width: 200px;
+  border-radius: 20px;
+  box-shadow: 0 0 80px rgba(255,120,0,0.9);
+  opacity: 0;
+  transform: translateY(150px) scale(0.8);
+  animation: logoRise 2.5s ease forwards;
+  z-index: 2;
+}
+
+@keyframes logoRise {
+  0% {
+    opacity: 0;
+    transform: translateY(150px) scale(0.8);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-20px) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
