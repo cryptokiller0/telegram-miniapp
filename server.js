@@ -51,7 +51,11 @@ app.use(express.static(path.join(__dirname, "public")));
    BOT
 ========================= */
 
-const bot = new TelegramBot(BOT_TOKEN);
+/* 🔥 MODIFICA QUI: aggiunto webHook: true */
+const bot = new TelegramBot(BOT_TOKEN, {
+  webHook: true
+});
+
 const WEBHOOK_PATH = `/bot${BOT_TOKEN}`;
 const WEBHOOK_URL = `${BASE_URL}${WEBHOOK_PATH}`;
 
@@ -60,11 +64,7 @@ const WEBHOOK_URL = `${BASE_URL}${WEBHOOK_PATH}`;
 ========================= */
 
 app.post(WEBHOOK_PATH, (req, res) => {
-  try {
-    bot.processUpdate(req.body);
-  } catch (err) {
-    console.error("Errore processUpdate:", err.message);
-  }
+  bot.processUpdate(req.body);
   res.sendStatus(200);
 });
 
@@ -102,7 +102,7 @@ Scelto il prodotto scrivici in pvt:
               {
                 text: "🛒 Apri Mini-App",
                 web_app: {
-                  url: process.env.BASE_URL
+                  url: BASE_URL
                 }
               }
             ]
@@ -112,7 +112,6 @@ Scelto il prodotto scrivici in pvt:
     );
   }
 });
-
 
 /* =========================
    AUTH MINIAPP
