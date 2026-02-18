@@ -72,42 +72,47 @@ app.post(WEBHOOK_PATH, (req, res) => {
    /start
 ========================= */
 
-bot.onText(/\/start/, (msg) => {
-  const chatId = msg.chat.id;
+bot.on("message", (msg) => {
+  if (!msg.text) return;
 
-  bot.sendMessage(
-    chatId,
+  if (msg.text.startsWith("/start")) {
+    const chatId = msg.chat.id;
+
+    bot.sendMessage(
+      chatId,
 `Benvenuto dai Ragazzi Di Quartiere In Montagna 🏔️
 
 📱 Come usare la nostra mini-app
 
 All’interno della mini-app potrai trovare:
 
-• 🎥 Video dimostrativi dei prodotti, utili per vederli da vicino e capirne le caratteristiche.
-• 💰 Prezzi sempre aggiornati e facilmente consultabili.
-• 📄 Schede tecniche dettagliate per aiutarti a scegliere in modo informato.
+• 🎥 Video dimostrativi dei prodotti.
+• 💰 Prezzi sempre aggiornati.
+• 📄 Schede tecniche dettagliate.
 
 Per iniziare è sufficiente aprire la mini-app dal menu del bot.
 
 Scelto il prodotto scrivici in pvt:
 @Nelquartiere
 @fromthestreetstothestars`,
-    {
-      reply_markup: {
-        inline_keyboard: [
-          [
-            {
-              text: "🛒 Apri Mini-App",
-              web_app: {
-                url: BASE_URL
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "🛒 Apri Mini-App",
+                web_app: {
+                  url: process.env.BASE_URL
+                }
               }
-            }
+            ]
           ]
-        ]
+        }
       }
-    }
-  );
+    );
+  }
 });
+
 
 /* =========================
    AUTH MINIAPP
